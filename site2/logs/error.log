@@ -1,0 +1,20 @@
+2020/08/19 00:38:04 [emerg] 1#1: open() "/var/log/nginx/" failed (21: Is a directory)
+2020/08/19 00:39:28 [emerg] 1#1: open() "/var/log/nginx/" failed (21: Is a directory)
+2020/08/19 00:43:32 [emerg] 1#1: open() "/var/log/nginx/" failed (21: Is a directory)
+2020/08/19 00:53:10 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:13 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:15 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:17 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:19 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:22 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:26 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:33 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:53:46 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:54:13 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:55:05 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:56:05 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 00:57:59 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 01:33:18 [emerg] 1#1: open() "/var/log/nginx" failed (21: Is a directory)
+2020/08/19 01:45:54 [error] 29#29: *1 open() "/var/www/favicon.ico" failed (2: No such file or directory), client: 172.18.0.2, server: site1.devops-test.ru, request: "GET /favicon.ico HTTP/1.1", host: "site1.devops-test.ru", referrer: "https://site1.devops-test.ru/"
+2020/08/19 01:53:19 [error] 33#33: *1 open() "/var/www/favicon.ico" failed (2: No such file or directory), client: 172.18.0.2, server: site1.devops-test.ru, request: "GET /favicon.ico HTTP/1.1", host: "site2.devops-test.ru", referrer: "https://site2.devops-test.ru/"
+2020/08/19 20:46:09 [error] 28#28: *1 open() "/var/www/favicon.ico" failed (2: No such file or directory), client: 172.18.0.2, server: site2.devops-test.ru, request: "GET /favicon.ico HTTP/1.1", host: "site2.devops-test.ru", referrer: "https://site2.devops-test.ru/"

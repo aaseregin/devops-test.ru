@@ -1,0 +1,34 @@
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+  [entryPoints.monitor]
+    address = ":9090"
+    [entryPoints.monitor.auth]
+      [entryPoints.monitor.auth.basic]
+        users = ["admin:$apr1$CCrW2yx7$M49EG0SKai3t5G8N..g631"]
+
+[entryPoints.http]
+    address = ":80"
+      [entryPoints.http.redirect]
+        entryPoint = "https"
+[entryPoints.https]
+    address = ":443"
+      [entryPoints.https.tls]
+
+[api]
+entrypoint="monitor"
+dashboard = true
+debug = true
+
+[acme]
+email = "a.a.seregin@yandex.ru"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+  [acme.httpChallenge]
+  entryPoint = "http"
+
+[docker]
+domain = "devops-test.ru"
+watch = true
+network = "web"
