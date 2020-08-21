@@ -28,6 +28,7 @@ services:
 
   site1:
     image: nginx:alpine
+    restart: always
 
     labels:
       - traefik.backend=site1
@@ -47,6 +48,7 @@ services:
 
   site2:
     image: nginx:alpine
+    restart: always
 
     labels:
       - traefik.backend=site2
@@ -63,3 +65,5 @@ services:
       - web
     depends_on:
       - traefik
+
+
