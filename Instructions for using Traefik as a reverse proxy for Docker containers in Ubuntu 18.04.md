@@ -23,7 +23,7 @@ $ htpasswd -nb admin secure_password
 
 Используйте этот результат в файле конфигурации Traefik для настройки базовой аутентификации HTTP для проверки состояния Traefik и информационной панели мониторинга. Скопируйте всю строку результатов, чтобы ее можно было вставить.
 
-Создаем папку проекта devops-test
+Создаем папку проекта `devops-test`
 Внутри папки с проектом создаем 3 подпапки:
 `data` - для хранения файлов конфигурации traefik
 `site1` и `site2` - для хранения конфигураций наших приложений на базу nginx
@@ -85,7 +85,7 @@ domain = "devops-test.ru"
 watch = true
 network = "web"
 ```
-Далее, переходим в папку ~/devops-test/site1 и  создаем в ней 3 подпапки:
+Далее, переходим в папку `~/devops-test/site1` и  создаем в ней 3 подпапки:
 `hosts` - папка для хранения конфигурации nginx
 `logs` - папка для логов
 `www` - папка для файлов сайта.
@@ -109,7 +109,7 @@ server {
 ```sh
 $ echo "Welcome to site 1" > index.html
 ```
-Переходим в папку ~/devop-test/site2 и проделываем все те же манипуляции, заменяя текст `site1` на `site2` во всех конфигурациях.
+Переходим в папку `~/devop-test/site2` и проделываем все те же манипуляции, заменяя текст `site1` на `site2` во всех конфигурациях.
 
 Возвращаемся в корень проекта ~/devops-test и создаем файл `docker-compose.yml`. Используйте имена своих поддоменов вместо <https://monitor.devops-test.ru>, <https://site1.devops-test.ru>, <https://site2.devops-test.ru>.
 ```yml
@@ -190,7 +190,7 @@ $ docker network create web
 ```sh
 $ docker-compose up -d
 ```
-Для запуска набора контейнеров в автоматическом режиме, сразу после старта сервера, необходимо создать службу в директории: /etc/systemd/system/docker-compose-app.service
+Для запуска набора контейнеров в автоматическом режиме, сразу после старта сервера, необходимо создать службу в директории: `/etc/systemd/system/docker-compose-app.service`
 ```
 [Unit]
 Description=Docker Compose Application Service
