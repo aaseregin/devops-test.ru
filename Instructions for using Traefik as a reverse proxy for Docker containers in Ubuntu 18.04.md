@@ -1,42 +1,47 @@
-Введение.
-Для запуска нескольких приложений на одном хосте Docker нужно настроить обратный прокси, чтобы оставить открытыми только порты 80 и 443.
+# Введение.
+Для запуска нескольких приложений на одном хосте Docker нужно настроить обратный прокси, чтобы оставить открытыми только порты `80` и `443`.
 Traefik - обратный прокси с поддержкой Docker, имеет собственную панель мониторинга. В данной инструкции Traefik будет использоваться для перенаправления запросов двух разных контейнеров NGINX. Также traefik будет настроен для обслуживание соединений через HTTPS с помощью Let's Encrypt.
 
 Начальные условия:
-- Сервер Ubuntu, развернутый на облачной платформе. Например, yandex.cloud
-- Docker, установленный согласно официальной инструкции: https://docs.docker.com/engine/install/ubuntu/
-- Docker Compose, установленный согласно официальной инструкции: https://docs.docker.com/compose/install/
+- Сервер Ubuntu, развернутый на облачной платформе. Например, [Яндекс.Облако](https://cloud.yandex.ru/)
+- Docker, установленный согласно официальной инструкции: <https://docs.docker.com/engine/install/ubuntu/>
+- Docker Compose, установленный согласно официальной инструкции: <https://docs.docker.com/compose/install/>
 - Домен и три записи A, test1, test2, и monitor, каждая из которых указывает на IP-адрес вашего сервера.
 
 Для начала настроим шифрованный пароль для доступа к информационной панели мониторинга с помощью htpasswd.
 Устанавливаем пакет:
+```sh
 $ sudo apt-get install apache2-utils
+```
 Генерируем пароль:
-Вместо "secure_password" вставьте свой пароль
-
-htpasswd -nb admin secure_password
-
+Вместо `secure_password` вставьте свой пароль
+```sh
+$ htpasswd -nb admin secure_password
+```
 Программа выдаст результат:
-admin:$apr1$CCrW2yx7$M49EG0SKai3t5G8N..g631
+`admin:$apr1$CCrW2yx7$M49EG0SKai3t5G8N..g631`
 
 Используйте этот результат в файле конфигурации Traefik для настройки базовой аутентификации HTTP для проверки состояния Traefik и информационной панели мониторинга. Скопируйте всю строку результатов, чтобы ее можно было вставить.
 
 Создаем папку проекта devops-test
 Внутри папки с проектом создаем 3 подпапки:
-"data" - для хранения файлов конфигурации traefik
-"site1" и "site2" - для хранения конфигураций наших приложений на базу nginx
+`data` - для хранения файлов конфигурации traefik
+`site1` и `site2` - для хранения конфигураций наших приложений на базу nginx
 
-В папке "data" создаем пустой файл, где будет храниться информация Let’s Encrypt. Мы передадим ее в контейнер, чтобы Traefik мог ее использовать:
-touch acme.json
-
+В папке `data` создаем пустой файл, где будет храниться информация Let’s Encrypt. Мы передадим ее в контейнер, чтобы Traefik мог ее использовать:
+```sh
+$ touch acme.json
+```
 Traefik сможет использовать этот файл, только если пользователь root внутри контейнера будет иметь уникальный доступ к этому файлу для чтения и записи. Для этого нам нужно будет заблокировать разрешения файла acme.json, чтобы права записи и чтения были только у владельца файла.
-
+```sh
 $ chmod 600 acme.json
-
+```
 После передачи файла в Docker владелец автоматически сменяется на пользователя root внутри контейнера.
 
-Также в папке "data" создаём файл traefik.toml
-vim traefik.toml
+Также в папке `data` создаём файл `traefik.toml`
+```sh
+$ vim traefik.toml
+```yml
 #Добавляем две точки входа с именами http и https, которые будут по умолчанию доступны всем серверным компонентам
 defaultEntryPoints = ["http", "https"]
 
@@ -79,14 +84,14 @@ onHostRule = true
 domain = "devops-test.ru"
 watch = true
 network = "web"
-
+```
 Далее, переходим в папку ~/devops-test/site1 и  создаем в ней 3 подпапки:
-"hosts" - папка для хранения конфигурации nginx
-"logs" - папка для логов
-"www" - папка для файлов сайта.
+`hosts` - папка для хранения конфигурации nginx
+`logs` - папка для логов
+`www` - папка для файлов сайта.
 
-В папке "hosts" создаем файл default.conf следующего содержания:
-
+В папке `hosts` создаем файл `default.conf` следующего содержания:
+```conf
 server {
 	listen 80;
 
@@ -99,14 +104,15 @@ server {
 	}
 	
 }
+```
+Переходим в папку `www`. Создаем файл `index.html` с текстом `Welcome to site 1`
+```sh
+$ echo "Welcome to site 1" > index.html
+```
+Переходим в папку ~/devop-test/site2 и проделываем все те же манипуляции, заменяя текст `site1` на `site2` во всех конфигурациях.
 
-Переходим в папку www. Создаем файл index.html с текстом Welcome to site 1 
-echo "Welcome to site 1" > index.html
-
-Переходим в папку ~/devop-test/site2 и проделываем все те же манипуляции, заменяя текст site1 на site2 во всех конфигурациях.
-
-Возвращаемся в корень проекта ~/devops-test и создаем файл docker-compose.yml. Используйте имена своих поддоменов вместо "monitor.devops-test.ru", "site1.devops-test.ru", "site2.devops-test.ru".
-
+Возвращаемся в корень проекта ~/devops-test и создаем файл `docker-compose.yml`. Используйте имена своих поддоменов вместо <https://monitor.devops-test.ru>, <https://site1.devops-test.ru>, <https://site2.devops-test.ru>.
+```yml
 #Docker Compose версии 3
 version: "3"
 
@@ -175,16 +181,17 @@ services:
       - web
     depends_on:
       - traefik
-
+```
 Создаём сеть web:
+```sh
 $ docker network create web
-
+```
 Всё готово. Запускаем контейнеры с помощью docker-compose:
-
+```sh
 $ docker-compose up -d
-
+```
 Для запуска набора контейнеров в автоматическом режиме, сразу после старта сервера, необходимо создать службу в директории: /etc/systemd/system/docker-compose-app.service
-
+```
 [Unit]
 Description=Docker Compose Application Service
 Requires=docker.service
@@ -200,9 +207,9 @@ TimeoutStartSec=0
 
 [Install]
 WantedBy=multi-user.target
-
+```
 Включить службу для запуска автоматически:
-
+```sh
 $ systemctl enable docker-compose-app
-
+```
 
