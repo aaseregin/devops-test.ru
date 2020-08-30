@@ -22,7 +22,6 @@ services:
       - traefik.frontend.rule=Host:monitor.devops-test.ru
       - traefik.port=9090
     networks:
-      - internal
       - web
 
   site1:
