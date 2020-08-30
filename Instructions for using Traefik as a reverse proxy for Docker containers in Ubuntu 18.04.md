@@ -119,32 +119,30 @@ version: "3"
 networks:
   web:
     external: true
-  internal:
-    external: false
 
 services:
   traefik:
-    image: traefik:1.7.2-alpine 
+    image: traefik:1.7.2-alpine
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443
   
     volumes:
-      - /etc/localtime:/etc/localtime
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data/traefik.toml:/traefik.toml
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.toml:/traefik.toml:ro
       - ./data/acme.json:/acme.json
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:monitor.devops-test.ru
       - traefik.port=9090
     networks:
-      - internal
       - web
 
   site1:
     image: nginx:alpine
-    restart: always
+    restart: unless-stopped
 
     labels:
       - traefik.backend=site1
@@ -157,14 +155,13 @@ services:
       - ./site1/www:/var/www
       - ./site1/logs:/var/log/nginx
     networks:
-      - internal
       - web
     depends_on:
       - traefik
 
   site2:
     image: nginx:alpine
-    restart: always
+    restart: unless-stopped
 
     labels:
       - traefik.backend=site2
@@ -177,7 +174,6 @@ services:
       - ./site2/www:/var/www
       - ./site2/logs:/var/log/nginx
     networks:
-      - internal
       - web
     depends_on:
       - traefik
