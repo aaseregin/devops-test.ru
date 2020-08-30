@@ -3,12 +3,11 @@ version: "3"
 networks:
   web:
     external: true
-  internal:
-    external: false
 
 services:
   traefik:
     image: traefik:1.7.2-alpine 
+    restart: always
     ports:
       - 80:80
       - 443:443
@@ -41,7 +40,6 @@ services:
       - ./site1/www:/var/www
       - ./site1/logs:/var/log/nginx
     networks:
-      - internal
       - web
     depends_on:
       - traefik
@@ -61,7 +59,6 @@ services:
       - ./site2/www:/var/www
       - ./site2/logs:/var/log/nginx
     networks:
-      - internal
       - web
     depends_on:
       - traefik
